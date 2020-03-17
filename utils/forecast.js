@@ -6,19 +6,19 @@ const forecast =  (latitude, longitude, callback) =>
 
     request(
     {
-        url: url,
+        url,
         json: true
-    }, (error, response) =>
+    }, (error, {body}) =>
     {
         if(error)
         {
-            callback('Unable to connect to weather service.', undefined);
-        }else if(response.body.error)
-        {
-            callback(response.body.error, undefined);
+            callback('Unable to connect to weather service.', {undefined, undefined, undefined});
         }else
         {
-            callback(undefined, response.body.daily.data[0].summary + ' It is currently ' + response.body.currently.temperature + ' degrees out.' + ' There is a ' + response.body.currently.precipProbability + '% chance of rain.');
+            const summary = body.daily.data[0].summary;
+            const temp = body.currently.temperature;
+            const precipProb = body.currently.precipProbability;
+            callback(undefined, summary + ' It is currently ' + temp + ' degrees out.' + ' There is a ' + precipProb + '% chance of rain.');
         }
     })
 }
